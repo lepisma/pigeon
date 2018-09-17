@@ -1,0 +1,2 @@
+(defpackage #:pigeon
+  (:use #:cl))

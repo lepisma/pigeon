@@ -1,0 +1,13 @@
+(defsystem #:pigeon
+  :description "s-exp based python"
+  :author "Abhinav Tushar <lepisma@fastmail.com>"
+  :license "GPLv3"
+  :version "0.1.0"
+  :depends-on ()
+  :components
+  ((:file "package")
+   (:module "src"
+    :depends-on ("package")
+    :serial t
+    :components
+    ((:file "pigeon")))))

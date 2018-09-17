@@ -1,0 +1,60 @@
+# -*- mode: org -*-
+#+TITLE: obtt-lisp
+
+A slightly modified quickproject-ish template.
+
+* Variables
+
+- Name :: pigeon
+- Description :: s-exp based python
+- Version :: 0.1.0
+
+* README
+
+#+BEGIN_SRC org :tangle ./README.org
+#+TITLE: pigeon
+
+s-exp based python
+#+END_SRC
+
+* System definition
+There is nothing for tests as of now.
+
+#+BEGIN_SRC lisp :tangle ./pigeon.asd
+(defsystem #:pigeon
+:description "s-exp based python"
+  :author "Abhinav Tushar <lepisma@fastmail.com>"
+  :license "GPLv3"
+  :version "0.1.0"
+  :depends-on ()
+  :components
+  ((:file "package")
+   (:module "src"
+    :depends-on ("package")
+    :serial t
+    :components
+    ((:file "pigeon")))))
+#+END_SRC
+
+* General module structure
+
+#+BEGIN_SRC lisp :tangle ./package.lisp
+(defpackage #:pigeon
+  (:use #:cl))
+#+END_SRC
+
+#+BEGIN_SRC lisp :tangle ./src/pigeon.lisp
+(in-package #:pigeon)
+#+END_SRC
+
+* Misc files
+
+** TODO Add gitignore
+
+** TODO Optional Lakefile and Roswell setting
+
+* License
+
+#+BEGIN_SRC shell :obtt eval
+gen license:gpl-3.0
+#+END_SRC
