@@ -76,6 +76,20 @@
   (let ((list (map 'list #'identity vec)))
     #?"NP.array(${(fmt-list list)})"))
 
+(defun fmt-import-item (item)
+  (ematch item
+    ((list module :as alias)
+     #?"import ${(fmt-id module)} as ${(fmt-id alias)}")
+    (module #?"import ${(fmt-id module)}")))
+
+(defun fmt-import (args)
+  (let* ((from-p (member :from args))
+         (item-args (if from-p (subseq args 0 (- (length args) 2)) args))
+         (lines (mapcar #'fmt-import-item item-args)))
+    (cl-strings:join (if from-p (prepend-pad lines #?"from ${(fmt-id (car (last args)))} ")
+                         lines)
+                     :separator (string #\linefeed))))
+
 (defun fmt (exp)
   (ematch exp
     ((list* 'defun name lambda-list body)
@@ -88,6 +102,8 @@
      (fmt-tuple args))
     ((cons 'progn body)
      (fmt-block body t))
+    ((cons 'import args)
+     (fmt-import args))
     ((guard x (atom x))
      (fmt-atom x))
     ((guard x (lambda-p x))
