@@ -1,5 +1,7 @@
 ;; -*- mode: lisp -*-
 
+(import (numpy :as np))
+
 (defun hello-world (a b c)
   (print (+ "hello" a b c))
   (setf a 2323)
