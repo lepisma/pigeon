@@ -55,7 +55,7 @@
 
 (defun fmt (exp)
   (ematch exp
-    ((cons 'defun (cons name (cons lambda-list body)))
+    ((list* 'defun name lambda-list body)
      (fmt-fn name lambda-list body))
     ((list 'setf lhs rhs)
      (fmt-setf lhs rhs))
