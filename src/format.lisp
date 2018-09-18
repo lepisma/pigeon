@@ -72,6 +72,18 @@
          (items (if (= 1 (length items)) (append items '("")) items)))
     #?"(${(cl-strings:join items :separator ", ")})"))
 
+(defun get-dict-items (args &optional earlier)
+  (ematch args
+    ((list* key value rest) (get-dict-items rest (cons (cons key value) earlier)))
+    ((or (list garbage) nil) (reverse earlier))))
+
+(defun fmt-dict-item (item)
+  #?"${(fmt (car item))}: ${(fmt (cdr item))}")
+
+(defun fmt-dict (args)
+  (let ((items (get-dict-items args)))
+    #?"{${(cl-strings:join (mapcar #'fmt-dict-item items) :separator ", ")}}"))
+
 (defun fmt-vector (vec)
   (let ((list (map 'list #'identity vec)))
     #?"NP.array(${(fmt-list list)})"))
@@ -100,6 +112,8 @@
      (fmt-list args))
     ((cons 'tuple args)
      (fmt-tuple args))
+    ((cons 'dict args)
+     (fmt-dict args))
     ((cons 'progn body)
      (fmt-block body t))
     ((cons 'import args)
