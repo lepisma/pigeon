@@ -86,7 +86,10 @@
 
 (defun fmt-vector (vec)
   (let ((list (map 'list #'identity vec)))
-    #?"NP.array(${(fmt-list list)})"))
+    #?"np.array(${(fmt-list list)})"))
+
+(defun fmt-getf (key obj)
+  #?"${(fmt obj)}[${(fmt key)}]")
 
 (defun fmt-import-item (item)
   (ematch item
@@ -114,6 +117,8 @@
      (fmt-tuple args))
     ((cons 'dict args)
      (fmt-dict args))
+    ((list 'getf key obj)
+     (fmt-getf key obj))
     ((cons 'progn body)
      (fmt-block body t))
     ((cons 'import args)
