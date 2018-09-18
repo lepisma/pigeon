@@ -1,3 +1,53 @@
 #+TITLE: pigeon
 
 s-exp based python
+
+* Programs that should work
+Most of these /don't work/ right now.
+
+#+BEGIN_SRC lisp
+  (def hello-world (name)
+    "Some function"
+    (print (+ "hello " name)))
+#+END_SRC
+
+#+BEGIN_SRC lisp
+  (import numpy :as np)
+
+  (defun random (size)
+    (np.random.rand size size))
+
+  (setf a "hello")
+
+  (print a)
+#+END_SRC
+
+** Types
+#+BEGIN_SRC lisp
+  t                              ;; True
+  f                              ;; False
+  none                           ;; None
+  (setf some-array #(1 2 3 5))   ;; lisp type vectors go as numpy array
+
+  (setf some-list (list 12 2 3)) ;; regular lists go as python lists
+
+  (setf some-dict {:a "world" :b "hello"})
+
+  (setf some-tuple (tuple 1 2))
+#+END_SRC
+
+*** TODO Inline constants
+
+** TODO Conditionals and loops
+
+** TODO Contexts
+
+** TODO Lambdas
+
+** TODO Rewrite rules
+
+** TODO Unquote
+
+** TODO Arrows
+
+** TODO Some stupid stuff
