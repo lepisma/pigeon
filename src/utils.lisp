@@ -1,5 +1,5 @@
 (in-package #:pigeon)
-
+(cl-interpol:enable-interpol-syntax)
 
 (defun indent-string (text &key indent)
   (let ((pad (make-string indent :initial-element #\space)))
