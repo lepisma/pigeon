@@ -6,6 +6,9 @@
 (defparameter *indent* 4
   "Indent for the generated python code. We use spaces around here.")
 
+(defparameter *infix-ops* '(+ - * / % **)
+  "Infix operators in python")
+
 (defun fmt-atom (exp)
   (cond ((stringp exp) #?""${exp}"")
         ((eq 't exp) "True")
@@ -28,9 +31,9 @@
   (cl-strings:join (mapcar #'fmt args) :separator #?" ${(fmt fn)} "))
 
 (defun fmt-call (fn args)
-  (case fn
-    (+ (fmt-call-infix fn args))
-    (otherwise #?"${(fmt-id fn)}(${(fmt-lambda-list args)})")))
+  (cond
+    ((member fn *infix-ops*) (fmt-call-infix fn args))
+    (t #?"${(fmt-id fn)}(${(fmt-lambda-list args)})")))
 
 (defun fmt (exp &key (level 0))
   (indent-string
@@ -46,9 +49,9 @@
 ;;; Here is a program I would like to transform to python
 
 (fmt
- '(def hello-world (name kke)
-   (print (+ "hello" name))))
+ '(def hello-world (a b c)
+   (print (+ "hello" a b c))))
 
 ;;; The output should be this
-;; def hello_world(name):
-;;     print("hello" + name)
+;; "def hello_world(a, b, c)
+;;     print(\"hello\" + a + b + c)"
