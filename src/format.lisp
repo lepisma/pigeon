@@ -22,10 +22,13 @@
 (defun fmt-lambda-list (args)
   (cl-strings:join (mapcar #'fmt args) :separator ", "))
 
+(defun fmt-block (body &key level)
+  (cl-strings:join (mapcar (cut fmt <> :level level) body) :separator (string #\linefeed)))
+
 (defun fmt-fn (name lambda-list body &key level)
   (let ((lambda-list (fmt-lambda-list lambda-list))
-        (body (fmt body :level (+ 1 level))))
-     #?"def ${(fmt-id name)}(${lambda-list})\n${body}"))
+        (body (fmt-block body :level (+ 1 level))))
+    #?"def ${(fmt-id name)}(${lambda-list}):\n${body}"))
 
 (defun fmt-call-infix (fn args)
   (cl-strings:join (mapcar #'fmt args) :separator #?" ${(fmt fn)} "))
@@ -38,7 +41,7 @@
 (defun fmt (exp &key (level 0))
   (indent-string
    (ematch exp
-     ((list 'def name lambda-list body)
+     ((cons 'def (cons name (cons lambda-list body)))
       (fmt-fn name lambda-list body :level level))
      ((cons fn args)
       (fmt-call fn args))
@@ -53,5 +56,5 @@
    (print (+ "hello" a b c))))
 
 ;;; The output should be this
-;; "def hello_world(a, b, c)
+;; "def hello_world(a, b, c):
 ;;     print(\"hello\" + a + b + c)"
