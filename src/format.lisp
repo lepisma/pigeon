@@ -10,11 +10,12 @@
   "Infix operators in python")
 
 (defun fmt-atom (exp)
-  (cond ((stringp exp) #?""${exp}"")
+  (cond ((stringp exp) #?"\"${exp}\"")
         ((eq 't exp) "True")
         ((eq 'f exp) "False")
         ((eq 'none exp) "None")
-        ((symbolp exp) (fmt-id exp))))
+        ((symbolp exp) (fmt-id exp))
+        ((numberp exp) (format nil "~A" exp))))
 
 (defun fmt-id (exp)
   (string-downcase (kebab-to-snake (symbol-name exp))))
@@ -22,12 +23,14 @@
 (defun fmt-lambda-list (args)
   (cl-strings:join (mapcar #'fmt args) :separator ", "))
 
-(defun fmt-block (body &key level)
-  (cl-strings:join (mapcar (cut fmt <> :level level) body) :separator (string #\linefeed)))
+(defun fmt-block (body)
+  (indent-string
+   (cl-strings:join (mapcar #'fmt body) :separator (string #\linefeed))
+   :indent *indent*))
 
-(defun fmt-fn (name lambda-list body &key level)
+(defun fmt-fn (name lambda-list body)
   (let ((lambda-list (fmt-lambda-list lambda-list))
-        (body (fmt-block body :level (+ 1 level))))
+        (body (fmt-block body)))
     #?"def ${(fmt-id name)}(${lambda-list}):\n${body}"))
 
 (defun fmt-call-infix (fn args)
@@ -38,23 +41,40 @@
     ((member fn *infix-ops*) (fmt-call-infix fn args))
     (t #?"${(fmt-id fn)}(${(fmt-lambda-list args)})")))
 
-(defun fmt (exp &key (level 0))
-  (indent-string
-   (ematch exp
-     ((cons 'def (cons name (cons lambda-list body)))
-      (fmt-fn name lambda-list body :level level))
-     ((cons fn args)
-      (fmt-call fn args))
-     ((guard x (atom x))
-      (fmt-atom exp)))
-   :indent (* level *indent*)))
+(defun fmt-setf (lhs rhs)
+  #?"${(fmt lhs)} = ${(fmt rhs)}")
 
-;;; Here is a program I would like to transform to python
+(defun fmt-list (args)
+  (let ((items (mapcar #'fmt args)))
+    #?"[${(cl-strings:join items :separator ", ")}]"))
+
+(defun fmt-tuple (args)
+  (let* ((items (mapcar #'fmt args))
+         (items (if (= 1 (length items)) (append items '("")) items)))
+    #?"(${(cl-strings:join items :separator ", ")})"))
+
+(defun fmt (exp)
+  (ematch exp
+    ((cons 'defun (cons name (cons lambda-list body)))
+     (fmt-fn name lambda-list body))
+    ((list 'setf lhs rhs)
+     (fmt-setf lhs rhs))
+    ((cons 'list args)
+     (fmt-list args))
+    ((cons 'tuple args)
+     (fmt-tuple args))
+    ((cons fn args)
+     (fmt-call fn args))
+    ((guard x (atom x))
+     (fmt-atom exp))))
+
+;;; Scratch
 
 (fmt
- '(def hello-world (a b c)
-   (print (+ "hello" a b c))))
-
-;;; The output should be this
-;; "def hello_world(a, b, c):
-;;     print(\"hello\" + a + b + c)"
+ '(defun hello-world (a b c)
+   (print (+ "hello" a b c))
+   (setf a 2323)
+   (setf a (+ a 33))
+   (print a)
+   (setf its (list 12 2 (tuple "sdsds" 33)))
+   (defun lol () "dsd")))
