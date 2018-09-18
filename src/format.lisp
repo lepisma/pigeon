@@ -72,15 +72,3 @@
      (fmt-atom x))
     ((cons fn args)
      (fmt-call fn args))))
-
-;;; Scratch
-
-(fmt
- '(defun hello-world (a b c)
-   (print (+ "hello" a b c))
-   (setf a 2323)
-   (setf a (+ a 33))
-   (print #(1 2 3))
-   (print a)
-   (setf its (list 12 2 (tuple "sdsds" 33)))
-   (defun lol () "dsd")))
