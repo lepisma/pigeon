@@ -15,7 +15,8 @@
         ((eq 'f exp) "False")
         ((eq 'none exp) "None")
         ((symbolp exp) (fmt-id exp))
-        ((numberp exp) (format nil "~A" exp))))
+        ((numberp exp) (format nil "~A" exp))
+        ((vectorp exp) (fmt-vector exp))))
 
 (defun fmt-id (exp)
   (string-downcase (kebab-to-snake (symbol-name exp))))
@@ -53,6 +54,10 @@
          (items (if (= 1 (length items)) (append items '("")) items)))
     #?"(${(cl-strings:join items :separator ", ")})"))
 
+(defun fmt-vector (vec)
+  (let ((list (map 'list #'identity vec)))
+    #?"np.array(${(fmt-list list)})"))
+
 (defun fmt (exp)
   (ematch exp
     ((list* 'defun name lambda-list body)
@@ -63,10 +68,10 @@
      (fmt-list args))
     ((cons 'tuple args)
      (fmt-tuple args))
-    ((cons fn args)
-     (fmt-call fn args))
     ((guard x (atom x))
-     (fmt-atom exp))))
+     (fmt-atom x))
+    ((cons fn args)
+     (fmt-call fn args))))
 
 ;;; Scratch
 
@@ -75,6 +80,7 @@
    (print (+ "hello" a b c))
    (setf a 2323)
    (setf a (+ a 33))
+   (print #(1 2 3))
    (print a)
    (setf its (list 12 2 (tuple "sdsds" 33)))
    (defun lol () "dsd")))
