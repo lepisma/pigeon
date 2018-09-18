@@ -4,7 +4,11 @@
   (print (+ "hello" a b c))
   (setf a 2323)
   (setf a (+ a 33))
+  (progn
+    (+ 1 1)
+    (- 1 2 2 2))
   (print #(1 2 3))
   (print a)
+  (map (fn-x (+ x 33)) (list 1 123 3))
   (setf its (list 12 2 (tuple "sdsds" 33)))
   (defun lol () "dsd"))

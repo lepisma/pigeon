@@ -9,8 +9,24 @@
 (defparameter *infix-ops* '(+ - * / % **)
   "Infix operators in python")
 
+(defun lambda-p (exp)
+  "Check whether the expression is a lambda"
+  (and (< 1 (length exp))
+       (symbolp (car exp))
+       (or (cl-strings:starts-with (symbol-name (car exp)) "FN-")
+           (eq (car exp) 'fn))))
+
+(defun lamdba-parse-args (fn-form)
+  (let ((args (subseq (symbol-name fn-form) 3)))
+    (map 'list #'identity args)))
+
+(defun fmt-lambda (fn-form body)
+  (let ((args (unless (eq fn-form 'fn) (fn-parse-args fn-form))))
+    #?"lambda ${(fmt-lambda-list args)}: ${(fmt body)}"))
+
 (defun fmt-atom (exp)
-  (cond ((stringp exp) #?"\"${exp}\"")
+  (cond ((characterp exp) (string-downcase (string exp)))
+        ((stringp exp) #?"\"${exp}\"")
         ((eq 't exp) "True")
         ((eq 'f exp) "False")
         ((eq 'none exp) "None")
@@ -19,15 +35,17 @@
         ((vectorp exp) (fmt-vector exp))))
 
 (defun fmt-id (exp)
-  (string-downcase (kebab-to-snake (symbol-name exp))))
+  (if (member exp *infix-ops*)
+      (symbol-name exp)
+      (string-downcase (kebab-to-snake (symbol-name exp)))))
 
 (defun fmt-lambda-list (args)
   (cl-strings:join (mapcar #'fmt args) :separator ", "))
 
-(defun fmt-block (body)
+(defun fmt-block (body &optional no-indent)
   (indent-string
    (cl-strings:join (mapcar #'fmt body) :separator (string #\linefeed))
-   :indent *indent*))
+   :indent (if no-indent 0 *indent*)))
 
 (defun fmt-fn (name lambda-list body)
   (let ((lambda-list (fmt-lambda-list lambda-list))
@@ -56,7 +74,7 @@
 
 (defun fmt-vector (vec)
   (let ((list (map 'list #'identity vec)))
-    #?"np.array(${(fmt-list list)})"))
+    #?"NP.array(${(fmt-list list)})"))
 
 (defun fmt (exp)
   (ematch exp
@@ -68,7 +86,11 @@
      (fmt-list args))
     ((cons 'tuple args)
      (fmt-tuple args))
+    ((cons 'progn body)
+     (fmt-block body t))
     ((guard x (atom x))
      (fmt-atom x))
+    ((guard x (lambda-p x))
+     (apply #'fmt-lambda exp))
     ((cons fn args)
      (fmt-call fn args))))
