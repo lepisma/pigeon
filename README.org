@@ -1,48 +1,82 @@
 #+TITLE: pigeon
 
-s-exp based python
-
-* Programs that should work
-Most of these /don't work/ right now.
+s-exp based lisp thingy to python transpiler. Most of the examples below /don't
+work/ right now.
 
 #+BEGIN_SRC lisp
-  (def hello-world (name)
-    "Some function"
-    (print (+ "hello " name)))
+  (fmt '(defun hello-world (name)
+         (print (+ "hello " name))))
 #+END_SRC
+
+#+RESULTS:
+: def hello_world(name):
+:     print("hello " + name)
 
 #+BEGIN_SRC lisp
-  (import numpy :as np)
+  (fmt
+   '(progn
+     (import (numpy :as np))
 
-  (defun random (size)
-    (np.random.rand size size))
+     (defun random (size)
+       (np.random.rand size size))
 
-  (setf a "hello")
+     (setf a "hello")
 
-  (print a)
+     (print a)))
 #+END_SRC
+
+#+RESULTS:
+: import numpy as np
+: def random(size):
+:     np.random.rand(size, size)
+: a = "hello"
+: print(a)
 
 ** Types
 #+BEGIN_SRC lisp
-  t                              ;; True
-  f                              ;; False
-  none                           ;; None
-  (setf some-array #(1 2 3 5))   ;; lisp type vectors go as numpy array
+  (fmt
+   '(progn
+     t                              ;; True
+     f                              ;; False
+     none                           ;; None
+     (setf some-array #(1 2 3 5))   ;; lisp type vectors go as numpy array
 
-  (setf some-list (list 12 2 3)) ;; regular lists go as python lists
+     (setf some-list (list 12 2 3)) ;; regular lists go as python lists
 
-  (setf some-dict {:a "world" :b "hello"})
+     (setf some-dict (dict "a" "world" "b" "hello"))
 
-  (setf some-tuple (tuple 1 2))
+     (setf some-tuple (tuple 1 2))))
 #+END_SRC
 
+#+RESULTS:
+: True
+: False
+: None
+: some_array = np.array([1, 2, 3, 5])
+: some_list = [12, 2, 3]
+: some_dict = {"a": "world", "b": "hello"}
+: some_tuple = (1, 2)
+
 *** TODO Inline constants
+
+** Lambdas
+
+#+BEGIN_SRC lisp
+  (fmt
+   '(progn
+     (fn "lol kek")
+     (fn-xy (+ x y))
+     (fn-abc (+ a b (/ 2 c)))))
+#+END_SRC
+
+#+RESULTS:
+: lambda : "lol kek"
+: lambda x, y: x + y
+: lambda a, b, c: a + b + 2 / c
 
 ** TODO Conditionals and loops
 
 ** TODO Contexts
-
-** TODO Lambdas
 
 ** TODO Rewrite rules
 
