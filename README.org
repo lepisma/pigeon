@@ -4,8 +4,8 @@ s-exp based lisp thingy to python transpiler. Most of the examples below /don't
 work/ right now.
 
 #+BEGIN_SRC lisp :exports both
-  (fmt '(defun hello-world (name)
-         (print (+ "hello " name))))
+  (pgfmt '(defun hello-world (name)
+           (print (+ "hello " name))))
 #+END_SRC
 
 #+RESULTS:
@@ -13,7 +13,7 @@ work/ right now.
 :     print(("hello " + name))
 
 #+BEGIN_SRC lisp :exports both
-  (fmt
+  (pgfmt
    '(progn
      (import (numpy :as np))
 
@@ -34,7 +34,7 @@ work/ right now.
 
 ** Types
 #+BEGIN_SRC lisp :exports both
-  (fmt
+  (pgfmt
    '(progn
      t                              ;; True
      f                              ;; False
@@ -62,7 +62,7 @@ work/ right now.
 ** Lambdas
 
 #+BEGIN_SRC lisp :exports both
-  (fmt
+  (pgfmt
    '(progn
      (fn "lol kek")
      (fn-xy (+ x y))
@@ -78,9 +78,11 @@ work/ right now.
 
 ** TODO Contexts
 
-** TODO Rewrite rules
+** Macros
+Pigeon uses usual lisp macros loaded from a ~.pgl~ files using ~pigeon::load-pgl~.
+Macro expansion works on the pigeon code before converting to python.
 
-** TODO Unquote
+** TODO Quasiquotes
 
 ** TODO Arrows
 

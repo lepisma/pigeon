@@ -134,3 +134,6 @@
      (apply #'fmt-lambda exp))
     ((cons fn args)
      (fmt-call fn args))))
+
+(defun pgfmt (&rest body)
+  (cl-strings:join (mapcar #'fmt body) :separator (string #\linefeed)))
