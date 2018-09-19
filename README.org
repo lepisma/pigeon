@@ -3,7 +3,7 @@
 s-exp based lisp thingy to python transpiler. Most of the examples below /don't
 work/ right now.
 
-#+BEGIN_SRC lisp
+#+BEGIN_SRC lisp :exports both
   (fmt '(defun hello-world (name)
          (print (+ "hello " name))))
 #+END_SRC
@@ -12,7 +12,7 @@ work/ right now.
 : def hello_world(name):
 :     print("hello " + name)
 
-#+BEGIN_SRC lisp
+#+BEGIN_SRC lisp :exports both
   (fmt
    '(progn
      (import (numpy :as np))
@@ -33,7 +33,7 @@ work/ right now.
 : print(a)
 
 ** Types
-#+BEGIN_SRC lisp
+#+BEGIN_SRC lisp :exports both
   (fmt
    '(progn
      t                              ;; True
@@ -61,7 +61,7 @@ work/ right now.
 
 ** Lambdas
 
-#+BEGIN_SRC lisp
+#+BEGIN_SRC lisp :exports both
   (fmt
    '(progn
      (fn "lol kek")
