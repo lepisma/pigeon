@@ -1,7 +1,8 @@
 #+TITLE: pigeon
 
-s-exp based lisp thingy to python transpiler. Most of the examples below /don't
-work/ right now.
+A toy S-EXP (a particular flavor) to python transpiler in the spirit of [[https://github.com/burtonsamograd/sxc][sxc]]. The
+plan is to exploit the macro system of common lisp to emit plain python source
+(not vm bytecode). Most of the useful stuff will go as regular lisp [[Macros][macros]].
 
 #+BEGIN_SRC lisp :exports both
   (pgfmt '(defun hello-world (name)
@@ -31,6 +32,8 @@ work/ right now.
 :     np.random.rand(size, size)
 : a = "hello"
 : print(a)
+
+* Features
 
 ** Types
 #+BEGIN_SRC lisp :exports both
