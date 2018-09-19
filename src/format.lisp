@@ -22,7 +22,7 @@
 
 (defun fmt-lambda (fn-form body)
   (let ((args (unless (eq fn-form 'fn) (lambda-parse-args fn-form))))
-    #?"lambda ${(fmt-lambda-list args)}: ${(fmt body)}"))
+    #?"(lambda ${(fmt-lambda-list args)}: ${(fmt body)})"))
 
 (defun fmt-atom (exp)
   (cond ((characterp exp) (string-downcase (string exp)))
@@ -59,7 +59,7 @@
 (defun fmt-call (fn args)
   (cond
     ((member fn *infix-ops*) (fmt-call-infix fn args))
-    (t #?"${(fmt-id fn)}(${(fmt-lambda-list args)})")))
+    (t #?"${(fmt fn)}(${(fmt-lambda-list args)})")))
 
 (defun fmt-setf (lhs rhs)
   #?"${(fmt lhs)} = ${(fmt rhs)}")
