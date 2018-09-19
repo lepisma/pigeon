@@ -1,0 +1,11 @@
+;;; -*- mode: lisp -*-
+
+(defpackage #:lake.user
+  (:use #:cl #:lake #:cl-syntax)
+  (:shadowing-import-from #:lake :directory))
+
+(in-package #:lake.user)
+(use-syntax :interpol)
+
+(task "default" ()
+      (sh "ros build ./bin/pigeon.ros"))

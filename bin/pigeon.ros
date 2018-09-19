@@ -1,0 +1,14 @@
+#!/bin/sh
+#|-*- mode:lisp -*-|#
+#|
+exec ros -Q -- $0 "$@"
+|#
+
+(ql:quickload :pigeon :silent t)
+
+(defpackage :ros.script.pigeon.3746368587
+  (:use :cl))
+(in-package :ros.script.pigeon.3746368587)
+
+(defun main (&rest argv)
+  (print argv))
