@@ -9,6 +9,9 @@
 (defparameter *infix-ops* '(+ - * / % **)
   "Infix operators in python")
 
+(defvar *macros* nil
+  "Macros enabled for the transformation")
+
 (defun lambda-p (exp)
   "Check whether the expression is a lambda"
   (and (< 1 (length exp))
@@ -59,6 +62,7 @@
 (defun fmt-call (fn args)
   (cond
     ((member fn *infix-ops*) (fmt-call-infix fn args))
+    ((member fn *macros*) (fmt (macroexpand-1 `(,fn ,@args))))
     (t #?"${(fmt fn)}(${(fmt-lambda-list args)})")))
 
 (defun fmt-setf (lhs rhs)
