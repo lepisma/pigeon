@@ -16,12 +16,12 @@
        (or (cl-strings:starts-with (symbol-name (car exp)) "FN-")
            (eq (car exp) 'fn))))
 
-(defun lamdba-parse-args (fn-form)
+(defun lambda-parse-args (fn-form)
   (let ((args (subseq (symbol-name fn-form) 3)))
     (map 'list #'identity args)))
 
 (defun fmt-lambda (fn-form body)
-  (let ((args (unless (eq fn-form 'fn) (fn-parse-args fn-form))))
+  (let ((args (unless (eq fn-form 'fn) (lambda-parse-args fn-form))))
     #?"lambda ${(fmt-lambda-list args)}: ${(fmt body)}"))
 
 (defun fmt-atom (exp)
@@ -53,7 +53,8 @@
     #?"def ${(fmt-id name)}(${lambda-list}):\n${body}"))
 
 (defun fmt-call-infix (fn args)
-  (cl-strings:join (mapcar #'fmt args) :separator #?" ${(fmt fn)} "))
+  (let ((text (cl-strings:join (mapcar #'fmt args) :separator #?" ${(fmt fn)} ")))
+    #?"(${text})"))
 
 (defun fmt-call (fn args)
   (cond
