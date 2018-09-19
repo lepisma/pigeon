@@ -10,7 +10,7 @@ work/ right now.
 
 #+RESULTS:
 : def hello_world(name):
-:     print("hello " + name)
+:     print(("hello " + name))
 
 #+BEGIN_SRC lisp :exports both
   (fmt
@@ -70,9 +70,9 @@ work/ right now.
 #+END_SRC
 
 #+RESULTS:
-: lambda : "lol kek"
-: lambda x, y: x + y
-: lambda a, b, c: a + b + 2 / c
+: (lambda : "lol kek")
+: (lambda x, y: (x + y))
+: (lambda a, b, c: (a + b + (2 / c)))
 
 ** TODO Conditionals and loops
 

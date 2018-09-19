@@ -1,0 +1,4 @@
+;;; -*- mode: lisp -*-
+
+(defmacro kek (a b)
+  `(+ ,a ,b))
