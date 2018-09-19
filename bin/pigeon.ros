@@ -4,11 +4,14 @@
 exec ros -Q -- $0 "$@"
 |#
 
-(ql:quickload :pigeon :silent t)
+(ql:quickload '(:pigeon :trivia) :silent t)
 
-(defpackage :ros.script.pigeon.3746368587
-  (:use :cl))
-(in-package :ros.script.pigeon.3746368587)
+(defpackage #:ros.script.pigeon.3746368587
+  (:use #:cl #:trivia))
+(in-package #:ros.script.pigeon.3746368587)
 
 (defun main (&rest argv)
-  (print argv))
+  (ematch argv
+    ((list input-path output-path)
+     (pigeon:transform-file input-path output-path))
+    (_ (princ "usage: pigeon <input-file> <output-file>"))))

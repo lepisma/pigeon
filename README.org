@@ -4,14 +4,15 @@ A toy S-EXP (a particular flavor) to python transpiler in the spirit of [[https:
 plan is to exploit the macro system of common lisp to emit plain python source
 (not vm bytecode). Most of the useful stuff will go as regular lisp [[Macros][macros]].
 
-#+BEGIN_SRC lisp :exports both
-  (pgfmt '(defun hello-world (name)
-           (print (+ "hello " name))))
+* Building
+
+#+BEGIN_SRC sh
+lake build
+./bin/pigeon <input-file> <output-path>
 #+END_SRC
 
-#+RESULTS:
-: def hello_world(name):
-:     print(("hello " + name))
+
+* Quickstart
 
 #+BEGIN_SRC lisp :exports both
   (pgfmt

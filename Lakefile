@@ -7,5 +7,5 @@
 (in-package #:lake.user)
 (use-syntax :interpol)
 
-(task "default" ()
+(task "build" ()
       (sh "ros build ./bin/pigeon.ros"))
