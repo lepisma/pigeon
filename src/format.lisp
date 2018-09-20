@@ -6,10 +6,10 @@
 (defparameter *indent* 4
   "Indent for the generated python code. We use spaces around here.")
 
-(defparameter *infix-ops* '(+ - * / % ** == != > < >= <= is in)
+(defparameter *infix-ops* '(+ - * / % ** == != > < >= <= or and is in)
   "Infix operators in python")
 
-(defparameter *statements* '(return)
+(defparameter *statements* '(return not)
   "Statements that have direct call pattern in python.")
 
 (defvar *macros* nil
