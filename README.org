@@ -30,7 +30,7 @@ lake build
 #+RESULTS:
 : import numpy as np
 : def random(size):
-:     np.random.rand(size, size)
+:     return np.random.rand(size, size)
 : a = "hello"
 : print(a)
 
@@ -79,6 +79,22 @@ lake build
 : (lambda a, b, c: (a + b + (2 / c)))
 
 ** TODO Conditionals and loops
+
+#+BEGIN_SRC lisp
+  (pgfmt
+   '(cond
+     ((this-thing) (then-that))
+     ((another-thing) (another-that))
+     (t fallback)))
+#+END_SRC
+
+#+RESULTS:
+: if this_thing():
+:     then_that()
+: elif another_thing():
+:     another_that()
+: else:
+:     fallback
 
 ** TODO Contexts
 

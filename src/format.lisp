@@ -6,7 +6,7 @@
 (defparameter *indent* 4
   "Indent for the generated python code. We use spaces around here.")
 
-(defparameter *infix-ops* '(+ - * / % **)
+(defparameter *infix-ops* '(+ - * / % ** == != > < >= <= is in)
   "Infix operators in python")
 
 (defparameter *statements* '(return)
@@ -67,11 +67,25 @@
   (let ((text (cl-strings:join (mapcar #'fmt args) :separator #?" ${(fmt fn)} ")))
     #?"(${text})"))
 
+(defun fmt-cond-clause (clause &optional first)
+  (ematch clause
+    ((cons t body)
+     #?"else:\n${(fmt-block body)}")
+    ((cons condition body)
+     (cond (first #?"if ${(fmt condition)}:\n${(fmt-block body)}")
+           (t #?"elif ${(fmt condition)}:\n${(fmt-block body)}")))))
+
+(defun fmt-cond (clauses)
+  (cl-strings:join (cons (fmt-cond-clause (car clauses) t)
+                         (mapcar #'fmt-cond-clause (cdr clauses)))
+                   :separator (string #\linefeed)))
+
 (defun fmt-call (fn args)
   (cond
     ((member fn *infix-ops*) (fmt-call-infix fn args))
     ((member fn *macros*) (fmt (macroexpand-1 `(,fn ,@args))))
     ((member fn *statements*) #?"${(fmt fn)} ${(fmt-lambda-list args)}")
+    ((eq fn 'cond) (fmt-cond args))
     (t #?"${(fmt fn)}(${(fmt-lambda-list args)})")))
 
 (defun fmt-setf (lhs rhs)
