@@ -6,7 +6,7 @@
 (defparameter *indent* 4
   "Indent for the generated python code. We use spaces around here.")
 
-(defparameter *infix-ops* '(+ - * / % ** == != > < >= <= or and is in)
+(defparameter *infix-ops* '(+ - * / % ** == != > < >= <= >> << or and is in)
   "Infix operators in python")
 
 (defparameter *statements* '(return not)
