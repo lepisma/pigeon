@@ -9,6 +9,9 @@
 (defparameter *infix-ops* '(+ - * / % **)
   "Infix operators in python")
 
+(defparameter *statements* '(return)
+  "Statements that have direct call pattern in python.")
+
 (defvar *macros* nil
   "Macros enabled for the transformation")
 
@@ -23,6 +26,10 @@
   (let ((args (subseq (symbol-name fn-form) 3)))
     (map 'list #'identity args)))
 
+(defun add-return (body)
+  "Add a return statement to the last item of the body"
+  (append (subseq body 0 (- (length body) 1)) (list (cons 'return (last body)))))
+
 (defun fmt-lambda (fn-form body)
   (let ((args (unless (eq fn-form 'fn) (lambda-parse-args fn-form))))
     #?"(lambda ${(fmt-lambda-list args)}: ${(fmt body)})"))
@@ -33,6 +40,7 @@
         ((eq 't exp) "True")
         ((eq 'f exp) "False")
         ((eq 'none exp) "None")
+        ((null exp) "[]")
         ((symbolp exp) (fmt-id exp))
         ((numberp exp) (format nil "~A" exp))
         ((vectorp exp) (fmt-vector exp))))
@@ -52,7 +60,7 @@
 
 (defun fmt-fn (name lambda-list body)
   (let ((lambda-list (fmt-lambda-list lambda-list))
-        (body (fmt-block body)))
+        (body (fmt-block (add-return body))))
     #?"def ${(fmt-id name)}(${lambda-list}):\n${body}"))
 
 (defun fmt-call-infix (fn args)
@@ -63,6 +71,7 @@
   (cond
     ((member fn *infix-ops*) (fmt-call-infix fn args))
     ((member fn *macros*) (fmt (macroexpand-1 `(,fn ,@args))))
+    ((member fn *statements*) #?"${(fmt fn)} ${(fmt-lambda-list args)}")
     (t #?"${(fmt fn)}(${(fmt-lambda-list args)})")))
 
 (defun fmt-setf (lhs rhs)
