@@ -13,7 +13,9 @@
     :depends-on ("package")
     :serial t
     :components
-    ((:file "utils")
+    ((:file "vars")
+     (:file "utils")
+     (:file "read")
      (:file "predicates")
      (:file "transform")
      (:file "format")

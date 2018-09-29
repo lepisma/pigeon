@@ -1,4 +1,5 @@
 ;;; -*- mode: lisp -*-
 
-(defmacro kek (a b)
-  `(+ ,a ,b))
+(defmacro incv (a &optional (val 1))
+  "Test macro"
+  `(setf ,a (+ ,a ,val)))

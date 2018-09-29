@@ -12,9 +12,6 @@
 (defparameter *statements* '(return not)
   "Statements that have direct call pattern in python.")
 
-(defvar *macros* nil
-  "Macros enabled for the transformation")
-
 (defun lambda-parse-args (fn-form)
   (let ((args (subseq (symbol-name fn-form) 3)))
     (map 'list #'identity args)))
@@ -126,6 +123,10 @@
                          lines)
                      :separator (string #\linefeed))))
 
+(defun fmt-ext (ext-path)
+  (load-pgl ext-path)
+  #?"# loaded extension from ${ext-path}")
+
 (defun fmt (exp)
   (ematch exp
     ((list* 'defun name lambda-list body)
@@ -144,6 +145,8 @@
      (fmt-block body t))
     ((cons 'import args)
      (fmt-import args))
+    ((list 'load-ext ext-path)
+     (fmt-ext ext-path))
     ((guard x (atom x))
      (fmt-atom x))
     ((guard x (lambda-p x))

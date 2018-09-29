@@ -5,5 +5,4 @@
         #:trivia)
   (:export #:pgfmt
            #:read-pg
-           #:load-pgl
-           #:write-text))
+           #:load-pgl))

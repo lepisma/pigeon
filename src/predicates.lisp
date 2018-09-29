@@ -3,7 +3,6 @@
 (in-package #:pigeon)
 (cl-interpol:enable-interpol-syntax)
 
-
 (defun lambda-p (exp)
   "Check whether the expression is a lambda"
   (and (< 1 (length exp))
