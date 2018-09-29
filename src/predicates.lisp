@@ -9,3 +9,7 @@
        (symbolp (car exp))
        (or (cl-strings:starts-with (symbol-name (car exp)) "FN-")
            (eq (car exp) 'fn))))
+
+(defun id-p (exp)
+  (or (symbolp exp)
+      (match exp ((list 'cons (cons 'quote _) _) t))))

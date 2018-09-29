@@ -42,9 +42,12 @@
         ((vectorp exp) (fmt-vector exp))))
 
 (defun fmt-id (exp)
-  (if (member exp *infix-ops*)
-      (symbol-name exp)
-      (string-downcase (kebab-to-snake (symbol-name exp)))))
+  (ematch exp
+    ((list 'cons (cons 'quote _) id-string)
+     id-string)
+    ((guard x (member exp *infix-ops*))
+     (symbol-name x))
+    (_ (string-downcase (kebab-to-snake (symbol-name exp))))))
 
 (defun fmt-lambda-list (args)
   (cl-strings:join (mapcar #'fmt args) :separator ", "))
@@ -155,6 +158,8 @@
      (fmt-ext ext-path))
     ((guard x (atom x))
      (fmt-atom x))
+    ((guard x (id-p x))
+     (fmt-id x))
     ((guard x (lambda-p x))
      (apply #'fmt-lambda exp))
     ((cons fn args)
