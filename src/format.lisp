@@ -24,9 +24,15 @@
   (let ((args (unless (eq fn-form 'fn) (lambda-parse-args fn-form))))
     #?"(lambda ${(fmt-lambda-list args)}: ${(fmt body)})"))
 
+(defun fmt-string (string)
+  "Need to check for multiline strings too."
+  (if (find #\linefeed string)
+      #?"\"\"\"${string}\"\"\""
+      #?"\"${string}\""))
+
 (defun fmt-atom (exp)
   (cond ((characterp exp) (string-downcase (string exp)))
-        ((stringp exp) #?"\"${exp}\"")
+        ((stringp exp) (fmt-string exp))
         ((eq 't exp) "True")
         ((eq 'f exp) "False")
         ((eq 'none exp) "None")
