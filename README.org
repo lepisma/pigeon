@@ -145,6 +145,37 @@ unconditionally. Otherwise, we will run it as the regular indented loop.
 Pigeon uses usual lisp macros loaded from a ~.pgl~ files using ~pigeon::load-pgl~.
 Macro expansion works on the pigeon code before converting to python.
 
+** Imports
+#+BEGIN_SRC lisp :exports both
+  (pgfmt
+   '(import numpy :as np)
+   '(import (kek :as lol) :from lel)
+   '(import (this :as that) (who :as whom)))
+#+END_SRC
+
+#+RESULTS:
+: import numpy
+: import as
+: import np
+: 
+: from lel import kek as lol
+: 
+: import this as that
+: import who as whom
+
+** IDs
+To use case sensitive python ids, use ~#i~ reader macro:
+
+#+BEGIN_SRC lisp :exports both
+  (pgfmt '(setf #i"THisIsSick" 343)
+         '(import #i"LastFm"))
+#+END_SRC
+
+#+RESULTS:
+: THisIsSick = 343
+: 
+: import LastFm
+
 ** TODO Quasiquotes
 
 ** TODO Arrows
