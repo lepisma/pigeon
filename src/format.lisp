@@ -1,4 +1,4 @@
-;;; Functions for formatting the forms
+;;; Functions for formatting the primitives that translate directly to python
 
 (in-package #:pigeon)
 (cl-interpol:enable-interpol-syntax)
@@ -14,13 +14,6 @@
 
 (defvar *macros* nil
   "Macros enabled for the transformation")
-
-(defun lambda-p (exp)
-  "Check whether the expression is a lambda"
-  (and (< 1 (length exp))
-       (symbolp (car exp))
-       (or (cl-strings:starts-with (symbol-name (car exp)) "FN-")
-           (eq (car exp) 'fn))))
 
 (defun lambda-parse-args (fn-form)
   (let ((args (subseq (symbol-name fn-form) 3)))
@@ -159,4 +152,4 @@
      (fmt-call fn args))))
 
 (defun pgfmt (&rest body)
-  (cl-strings:join (mapcar #'fmt body) :separator (string #\linefeed)))
+  (cl-strings:join (mapcar #'fmt body) :separator (make-string 2 :initial-element #\linefeed)))

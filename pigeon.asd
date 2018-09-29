@@ -14,5 +14,8 @@
     :serial t
     :components
     ((:file "utils")
+     (:file "predicates")
+     (:file "transform")
      (:file "format")
+     (:file "shell")
      (:file "pigeon")))))

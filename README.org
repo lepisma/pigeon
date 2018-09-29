@@ -11,7 +11,6 @@ lake build
 ./bin/pigeon <input-file> <output-path>
 #+END_SRC
 
-
 * Quickstart
 
 #+BEGIN_SRC lisp :exports both
@@ -80,7 +79,7 @@ lake build
 
 ** TODO Conditionals and loops
 
-#+BEGIN_SRC lisp
+#+BEGIN_SRC lisp :exports both
   (pgfmt
    '(cond
      ((this-thing) (then-that))
@@ -95,6 +94,46 @@ lake build
 :     another_that()
 : else:
 :     fallback
+
+If you are doing a ~setf~ with a ~loop~, you should get a list comprehension
+unconditionally. Otherwise, we will run it as the regular indented loop.
+
+#+BEGIN_SRC lisp :exports both
+  ;; regular for loop
+  (pgfmt
+   '(loop for var in exp do
+     stuff
+     stuff-2))
+
+  ;; regular for loop with results collected in a list
+  (pgfmt
+   '(loop for var in exp collect stuff stuff-2))
+
+  (pgfmt
+   '(loop for var in exp
+     if condition
+     collect value))
+
+  (pgfmt
+   '(loop for var in exp
+     if condition
+     collect-dict key value))
+
+  (pgfmt
+   '(loop for var in exp
+     if condition
+     collect-set value))
+
+  (pgfmt
+   '(loop for var in exp
+     if condition
+     collect-gen value))
+
+  (pgfmt
+   '(loop while exp do
+     stuff
+     stuff-2))
+#+END_SRC
 
 ** TODO Contexts
 

@@ -13,5 +13,9 @@ exec ros -Q -- $0 "$@"
 (defun main (&rest argv)
   (ematch argv
     ((list input-path output-path)
-     (pigeon:transform-file input-path output-path))
-    (_ (princ "usage: pigeon <input-file> <output-file>"))))
+     (let ((forms (pigeon:read-pg input-path)))
+       (pigeon:write-text (apply #'pigeon:pgfmt forms) output-path)))
+    ((list input-path)
+     (let ((forms (pigeon:read-pg input-path)))
+       (princ (apply #'pigeon:pgfmt forms))))
+    (_ (princ "usage: pigeon <input-file> [<output-file>]"))))

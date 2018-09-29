@@ -1,7 +1,9 @@
 (defpackage #:pigeon
   (:use #:cl
-        #:trivia
-        #:cl-cut)
+        #:alexandria
+        #:cl-cut
+        #:trivia)
   (:export #:pgfmt
+           #:read-pg
            #:load-pgl
-           #:transform-file))
+           #:write-text))
