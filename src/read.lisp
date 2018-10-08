@@ -16,7 +16,12 @@
 
 (defun read-case-sensitive-id (stream subchar arg)
   (declare (ignore subchar arg))
-  (let ((name (read stream t nil t)))
+  (let ((name (map 'string #'identity
+                   (loop for c = (peek-char nil stream nil nil t)
+                         while (and c (or (alphanumericp c)
+                                          (char-equal #\_ c)))
+                         do (read-char stream nil nil t)
+                         collect c))))
     `(cons 'id ,name)))
 
 (defun enable-case-sensitive-id-syntax ()

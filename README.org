@@ -167,8 +167,8 @@ Macro expansion works on the pigeon code before converting to python.
 To use case sensitive python ids, use ~#i~ reader macro:
 
 #+BEGIN_SRC lisp :exports both
-  (pgfmt '(setf #i"THisIsSick" 343)
-         '(import #i"LastFm"))
+  (pgfmt '(setf #iTHisIsSick 343)
+         '(import #iLastFm))
 #+END_SRC
 
 #+RESULTS:

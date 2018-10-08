@@ -1,6 +1,6 @@
 ;; -*- mode:lisp -*-
 
-(setf #i"DOC" "mpm-scrobble
+(setf #iDOC "mpm-scrobble
 
 Usage:
   mpm-scrobble [--config=<CFG>] [--log=<LOG>] [--scrobbled-at=<FILE>] [--lfm-creds=<JSON>]
@@ -15,12 +15,12 @@ Options:
   --scrobbled-at=<FILE>  Path to scrobbled at file [default: ~/.mpm.d/scrobbled-at]
   --lfm-creds=<JSON>     Path to lastfm creds file [default: ~/.mpm.d/last-fm.json]")
 
-(import (#i"LastFMNetwork" :as lnet) :from pylast)
+(import (#iLastFMNetwork :as lnet) :from pylast)
 (import docopt :from docopt)
 (import yaml)
 (import json)
 (import --version-- :from mpmplay)
-(import (#i"Mpm" :as mpm) :from mpm.mpm)
+(import (#iMpm :as mpm) :from mpm.mpm)
 (import (mpm.db :as db))
 (import time :from time)
 
