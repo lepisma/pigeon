@@ -165,5 +165,5 @@
     ((cons fn args)
      (fmt-call fn args))))
 
-(defun pgfmt (&rest body)
+(defmacro pgfmt (&rest body)
   (cl-strings:join (mapcar #'fmt body) :separator (make-string 2 :initial-element #\linefeed)))

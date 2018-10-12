@@ -10,6 +10,9 @@ For a practical python-lisp, see [[https://github.com/hylang/hy][hy]].
 
 * Building
 
+/Don't use the binary version, it doesn't work for all the cases. Just run the
+repl./
+
 #+BEGIN_SRC sh
 lake build
 ./bin/pigeon <input-file> <output-path>
@@ -19,22 +22,23 @@ lake build
 
 #+BEGIN_SRC lisp :exports both
   (pgfmt
-   '(progn
-     (import (numpy :as np))
+   (import (numpy :as np))
 
-     (defun random (size)
-       (np.random.rand size size))
+   (defun random (size)
+     (np.random.rand size size))
 
-     (setf a "hello")
-
-     (print a)))
+   (setf a "hello")
+   (print a))
 #+END_SRC
 
 #+RESULTS:
 : import numpy as np
+: 
 : def random(size):
 :     return np.random.rand(size, size)
+: 
 : a = "hello"
+: 
 : print(a)
 
 * Features
@@ -42,27 +46,34 @@ lake build
 ** Types
 #+BEGIN_SRC lisp :exports both
   (pgfmt
-   '(progn
-     t                              ;; True
-     f                              ;; False
-     none                           ;; None
-     (setf some-array #(1 2 3 5))   ;; lisp type vectors go as numpy array
+   t                              ;; True
+   f                              ;; False
+   none                           ;; None
+   (setf some-array #(1 2 3 5))   ;; lisp type vectors go as numpy array
 
-     (setf some-list (list 12 2 3)) ;; regular lists go as python lists
+   (setf some-list [12 2 3])      ;; hy style lists go as python lists
 
-     (setf some-dict (dict "a" "world" "b" "hello"))
+   (setf some-dict (dict "a" "world" "b" "hello"))
 
-     (setf some-tuple (tuple 1 2))))
+   (setf some-tuple (tuple 1 2)))
 #+END_SRC
 
 #+RESULTS:
-: True
-: False
-: None
-: some_array = np.array([1, 2, 3, 5])
-: some_list = [12, 2, 3]
-: some_dict = {"a": "world", "b": "hello"}
-: some_tuple = (1, 2)
+#+begin_example
+True
+
+False
+
+None
+
+some_array = np.array([1, 2, 3, 5])
+
+some_list = [12, 2, 3]
+
+some_dict = {"a": "world", "b": "hello"}
+
+some_tuple = (1, 2)
+#+end_example
 
 *** TODO Inline constants
 
@@ -70,25 +81,25 @@ lake build
 
 #+BEGIN_SRC lisp :exports both
   (pgfmt
-   '(progn
-     (fn "lol kek")
-     (fn-xy (+ x y))
-     (fn-abc (+ a b (/ 2 c)))))
+   (fn "lol kek")
+   (fn-xy (+ x y))
+   (fn-abc (+ a b (/ 2 c))))
 #+END_SRC
 
 #+RESULTS:
 : (lambda : "lol kek")
+: 
 : (lambda x, y: (x + y))
+: 
 : (lambda a, b, c: (a + b + (2 / c)))
 
 ** TODO Conditionals and loops
 
 #+BEGIN_SRC lisp :exports both
   (pgfmt
-   '(cond
-     ((this-thing) (then-that))
-     ((another-thing) (another-that))
-     (t fallback)))
+   (cond ((this-thing) (then-that))
+         ((another-thing) (another-that))
+         (t fallback)))
 #+END_SRC
 
 #+RESULTS:
@@ -103,6 +114,7 @@ If you are doing a ~setf~ with a ~loop~, you should get a list comprehension
 unconditionally. Otherwise, we will run it as the regular indented loop.
 
 #+BEGIN_SRC lisp :exports both
+  ;; NOTE: These are not implemented as of now
   ;; regular for loop
   (pgfmt
    '(loop for var in exp do
@@ -148,9 +160,9 @@ Macro expansion works on the pigeon code before converting to python.
 ** Imports
 #+BEGIN_SRC lisp :exports both
   (pgfmt
-   '(import numpy :as np)
-   '(import (kek :as lol) :from lel)
-   '(import (this :as that) (who :as whom)))
+   (import numpy :as np)
+   (import (kek :as lol) :from lel)
+   (import (this :as that) (who :as whom)))
 #+END_SRC
 
 #+RESULTS:
@@ -167,8 +179,9 @@ Macro expansion works on the pigeon code before converting to python.
 To use case sensitive python ids, use ~#i~ reader macro:
 
 #+BEGIN_SRC lisp :exports both
-  (pgfmt '(setf #iTHisIsSick 343)
-         '(import #iLastFm))
+  (pgfmt
+   (setf #iTHisIsSick 343)
+   (import #iLastFm))
 #+END_SRC
 
 #+RESULTS:
