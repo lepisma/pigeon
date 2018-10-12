@@ -142,7 +142,7 @@
      (fmt-fn name lambda-list body))
     ((list 'setf lhs rhs)
      (fmt-setf lhs rhs))
-    ((cons 'list args)
+    ((cons 'pg-list args)
      (fmt-list args))
     ((cons 'tuple args)
      (fmt-tuple args))

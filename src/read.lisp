@@ -14,18 +14,28 @@
                 (setf *macros* (cons name *macros*)))
                (form (eval form))))))
 
+(defun read-until (stream okay-cond)
+  (map 'string #'identity
+       (loop for c = (read-char stream nil nil t)
+             while (and c (funcall okay-cond c))
+             collect c)))
+
 (defun read-case-sensitive-id (stream subchar arg)
   (declare (ignore subchar arg))
-  (let ((name (map 'string #'identity
-                   (loop for c = (peek-char nil stream nil nil t)
-                         while (and c (or (alphanumericp c)
-                                          (char-equal #\_ c)))
-                         do (read-char stream nil nil t)
-                         collect c))))
+  (let ((name (read-until stream (lambda (c)
+                                   (or (alphanumericp c)
+                                       (char-equal #\_ c))))))
     `(cons 'id ,name)))
+
+(defun read-pigeon-list (stream char)
+  (declare (ignore char))
+  (read-from-string #?"(pg-list ${(read-until stream (lambda (c) (char-not-equal #\] c)))})"))
 
 (defun enable-case-sensitive-id-syntax ()
   (set-dispatch-macro-character #\# #\i #'read-case-sensitive-id))
+
+(defun enable-pigeon-list-syntax ()
+  (set-macro-character #\[ #'read-pigeon-list))
 
 (defun read-pg (input-path)
   "Read pigeon code forms"
