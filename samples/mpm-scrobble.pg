@@ -24,6 +24,13 @@ Options:
 (import (mpm.db :as db))
 (import time :from time)
 
+;; Okay let's write down the things we need for this to work out
+;; - [x] list (only) comprehensions
+;; - [ ] context managers (general `with'; and then a macro for with-fp with-fpw)
+;; - [ ] keyword arguments in function call
+;; - [ ] if macro
+;; - [ ] Maybe that #p pathname. Might need to dynamically change the #p reader macro for this.
+
 ;; (defn read-log (file-name)
 ;;   (emap (fn [line] (emap int (.split line ",")))
 ;;         (with-fp file-name
