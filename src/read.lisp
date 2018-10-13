@@ -16,8 +16,9 @@
 
 (defun read-until (stream okay-cond)
   (map 'string #'identity
-       (loop for c = (read-char stream nil nil t)
+       (loop for c = (peek-char nil stream nil nil t)
              while (and c (funcall okay-cond c))
+             do (read-char stream nil nil t)
              collect c)))
 
 (defun read-case-sensitive-id (stream subchar arg)
@@ -29,7 +30,9 @@
 
 (defun read-pigeon-list (stream char)
   (declare (ignore char))
-  (read-from-string #?"(pg-list ${(read-until stream (lambda (c) (char-not-equal #\] c)))})"))
+  (let ((list-stuff (read-until stream (lambda (c) (char-not-equal #\] c)))))
+    (read-char stream nil nil t) ;; discarding the last #\]
+    (read-from-string #?"(pg-list ${list-stuff})")))
 
 (defun enable-case-sensitive-id-syntax ()
   (set-dispatch-macro-character #\# #\i #'read-case-sensitive-id))
