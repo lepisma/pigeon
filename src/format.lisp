@@ -90,6 +90,10 @@
 (defun fmt-setf (lhs rhs)
   #?"${(fmt lhs)} = ${(fmt rhs)}")
 
+(defun fmt-list-comp (thing item collection &optional condition)
+  (let ((last-bit (if condition #?" if ${(fmt condition)}" "")))
+    #?"[${(fmt thing)} for ${(fmt item)} in ${(fmt collection)}${last-bit}]"))
+
 (defun fmt-list (args)
   (let ((items (mapcar #'fmt args)))
     #?"[${(cl-strings:join items :separator ", ")}]"))
@@ -144,6 +148,8 @@
      (fmt-setf lhs rhs))
     ((cons 'pg-list args)
      (fmt-list args))
+    ((cons 'pg-list-comp args)
+     (apply #'fmt-list-comp args))
     ((cons 'tuple args)
      (fmt-tuple args))
     ((cons 'dict args)

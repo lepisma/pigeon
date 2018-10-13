@@ -110,6 +110,13 @@ some_tuple = (1, 2)
 : else:
 :     fallback
 
+#+BEGIN_SRC lisp :exports both
+  (pgfmt @[(+ x x) :for x :in (range 10) :if (evenp x)])
+#+END_SRC
+
+#+RESULTS:
+: [(x + x) for x in range(10) if evenp(x)]
+
 If you are doing a ~setf~ with a ~loop~, you should get a list comprehension
 unconditionally. Otherwise, we will run it as the regular indented loop.
 
