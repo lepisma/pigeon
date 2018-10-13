@@ -21,6 +21,18 @@
              do (read-char stream nil nil t)
              collect c)))
 
+(defun read-open-close (stream open-char close-char)
+  "Read a nest string following open and close chars."
+  (let ((nesting 0))
+    (map 'string #'identity
+         (loop for c = (peek-char nil stream nil nil t)
+               while (and c (or (char-not-equal close-char c) (not (zerop nesting))))
+               do (progn
+                    (read-char stream nil nil t)
+                    (cond ((char-equal open-char c) (incf nesting))
+                          ((char-equal close-char c) (decf nesting))))
+               collect c))))
+
 (defun read-case-sensitive-id (stream subchar arg)
   (declare (ignore subchar arg))
   (let ((name (read-until stream (lambda (c)
@@ -30,7 +42,7 @@
 
 (defun read-pigeon-list (stream char)
   (declare (ignore char))
-  (let ((list-stuff (read-until stream (lambda (c) (char-not-equal #\] c)))))
+  (let ((list-stuff (read-open-close stream #\[ #\])))
     (read-char stream nil nil t) ;; discarding the last #\]
     (read-from-string #?"(pg-list ${list-stuff})")))
 
