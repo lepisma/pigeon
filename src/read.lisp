@@ -46,11 +46,23 @@
     (read-char stream nil nil t) ;; discarding the last #\]
     (read-from-string #?"(pg-list ${list-stuff})")))
 
+(defun read-pigeon-list-comp (stream subchar arg)
+  (declare (ignore arg))
+  (ematch (read-pigeon-list stream subchar)
+    ((list 'pg-list thing :for item :in collection)
+     `(pg-list-comp ,thing ,item ,collection))
+    ((list 'pg-list thing :for item :in collection :if condition)
+     `(pg-list-comp ,thing ,item ,collection ,condition))))
+
 (defun enable-case-sensitive-id-syntax ()
   (set-dispatch-macro-character #\# #\i #'read-case-sensitive-id))
 
 (defun enable-pigeon-list-syntax ()
   (set-macro-character #\[ #'read-pigeon-list))
+
+(defun enable-pigeon-list-comp-syntax ()
+  (make-dispatch-macro-character #\@)
+  (set-dispatch-macro-character #\@ #\[ #'read-pigeon-list-comp))
 
 (defun read-pg (input-path)
   "Read pigeon code forms"
