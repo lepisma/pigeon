@@ -13,3 +13,9 @@
 (defun id-p (exp)
   (or (symbolp exp)
       (match exp ((list 'cons (cons 'quote _) _) t))))
+
+
+(defun kid-p (exp)
+  "Tell if the thing is id and starts with `:'"
+  (or (keywordp exp)
+      (match exp ((list 'cond (cons 'quote _) _) t))))

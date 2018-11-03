@@ -49,8 +49,13 @@
      (symbol-name x))
     (_ (string-downcase (kebab-to-snake (symbol-name exp))))))
 
-(defun fmt-lambda-list (args)
-  (cl-strings:join (mapcar #'fmt args) :separator ", "))
+(defun fmt-lambda-list (args &optional segments)
+  (if (null args)
+      (cl-strings:join (nreverse segments) :separator ", ")
+      (ematch (car args)
+        ((guard x (kid-p x))
+         (fmt-lambda-list (cddr args) (cons #?"${(fmt (car args))}=${(fmt (cadr args))}" segments)))
+        (_ (fmt-lambda-list (cdr args) (cons (fmt (car args)) segments))))))
 
 (defun fmt-block (body &optional no-indent)
   (indent-string
@@ -58,9 +63,8 @@
    :indent (if no-indent 0 *indent*)))
 
 (defun fmt-fn (name lambda-list body)
-  (let ((lambda-list (fmt-lambda-list lambda-list))
-        (body (fmt-block (add-return body))))
-    #?"def ${(fmt-id name)}(${lambda-list}):\n${body}"))
+  (let ((body (fmt-block (add-return body))))
+    #?"def ${(fmt-id name)}(${(fmt-lambda-list lambda-list)}):\n${body}"))
 
 (defun fmt-call-infix (fn args)
   (let ((text (cl-strings:join (mapcar #'fmt args) :separator #?" ${(fmt fn)} ")))

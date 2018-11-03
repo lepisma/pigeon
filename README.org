@@ -27,19 +27,27 @@ lake build
    (defun random (size)
      (np.random.rand size size))
 
+   (defun some-key (a :key-arg 10)
+     (+ 1 1))
+
    (setf a "hello")
    (print a))
 #+END_SRC
 
 #+RESULTS:
-: import numpy as np
-: 
-: def random(size):
-:     return np.random.rand(size, size)
-: 
-: a = "hello"
-: 
-: print(a)
+#+begin_example
+import numpy as np
+
+def random(size):
+    return np.random.rand(size, size)
+
+def some_key(a, key_arg=10):
+    return (1 + 1)
+
+a = "hello"
+
+print(a)
+#+end_example
 
 * Features
 
