@@ -158,7 +158,23 @@ unconditionally. Otherwise, we will run it as the regular indented loop.
      stuff-2))
 #+END_SRC
 
-** TODO Contexts
+** Contexts
+
+#+BEGIN_SRC lisp :exports both
+  (pgfmt
+   (with (open "this-thing")
+         (do-something))
+
+   (with (some-fn) :as k
+         (something-else k)))
+#+END_SRC
+
+#+RESULTS:
+: with open("this-thing"):
+:     do_something()
+: 
+: with some_fn() as k:
+:     something_else(k)
 
 ** Macros
 Pigeon uses usual lisp macros loaded from a ~.pgl~ files using ~pigeon::load-pgl~.

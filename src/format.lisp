@@ -140,10 +140,19 @@
   (load-pgl ext-path)
   #?"# loaded extension from ${ext-path}")
 
+(defun fmt-with (exp rest)
+  "`exp' is the only expression and `rest' might include `:as' specifier."
+  (ematch rest
+    ((list* :as name body)
+     #?"with ${(fmt exp)} as ${(fmt name)}:\n${(fmt-block body)}")
+    (_ #?"with ${(fmt exp)}:\n${(fmt-block rest)}")))
+
 (defun fmt (exp)
   (ematch exp
     ((list* 'defun name lambda-list body)
      (fmt-fn name lambda-list body))
+    ((list* 'with exp rest)
+     (fmt-with exp rest))
     ((list 'setf lhs rhs)
      (fmt-setf lhs rhs))
     ((cons 'pg-list args)
