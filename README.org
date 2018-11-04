@@ -191,15 +191,13 @@ Macro expansion works on the pigeon code before converting to python.
 ** Imports
 #+BEGIN_SRC lisp :exports both
   (pgfmt
-   (import numpy :as np)
+   (import numpy)
    (import (kek :as lol) :from lel)
    (import (this :as that) (who :as whom)))
 #+END_SRC
 
 #+RESULTS:
 : import numpy
-: import as
-: import np
 : 
 : from lel import kek as lol
 : 
