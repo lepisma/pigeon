@@ -52,10 +52,9 @@
 (defun fmt-lambda-list (args &optional segments)
   (if (null args)
       (cl-strings:join (nreverse segments) :separator ", ")
-      (ematch (car args)
-        ((guard x (kid-p x))
-         (fmt-lambda-list (cddr args) (cons #?"${(fmt (car args))}=${(fmt (cadr args))}" segments)))
-        (_ (fmt-lambda-list (cdr args) (cons (fmt (car args)) segments))))))
+      (cond ((kid-p (car args))
+             (fmt-lambda-list (cddr args) (cons #?"${(fmt (car args))}=${(fmt (cadr args))}" segments)))
+            (t (fmt-lambda-list (cdr args) (cons (fmt (car args)) segments))))))
 
 (defun fmt-block (body &optional no-indent)
   (indent-string
