@@ -241,7 +241,8 @@ To use case sensitive python ids, use ~#i~ reader macro:
 : def a_fun(arg):
 :     compute(arg)
 :     def something_in_python(a, b):
-:            return a + b
+:         return a + b
+:     
 :     return something_in_python(1, arg)
 
 ** TODO Quasiquotes

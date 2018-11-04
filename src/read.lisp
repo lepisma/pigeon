@@ -56,7 +56,7 @@
 
 (defun read-python-code (stream subchar arg)
   (declare (ignore subchar arg))
-  (let ((code (string-trim #?" \n" (read-open-close stream #\< #\>))))
+  (let ((code (string-trim #?"\n" (read-open-close stream #\< #\>))))
     (read-char stream nil nil t)
     `(pg-python ,code)))
 
