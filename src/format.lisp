@@ -151,6 +151,9 @@
      #?"with ${(fmt exp)} as ${(fmt name)}:\n${(fmt-block body)}")
     (_ #?"with ${(fmt exp)}:\n${(fmt-block rest)}")))
 
+(defun fmt-python (code)
+  (dedent-string code))
+
 (defun fmt (exp)
   (ematch exp
     ((list* 'defun name lambda-list body)
@@ -163,6 +166,8 @@
      (fmt-list args))
     ((cons 'pg-list-comp args)
      (apply #'fmt-list-comp args))
+    ((list 'pg-python code)
+     (fmt-python code))
     ((cons 'tuple args)
      (fmt-tuple args))
     ((cons 'dict args)

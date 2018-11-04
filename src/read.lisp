@@ -54,6 +54,12 @@
     ((list 'pg-list thing :for item :in collection :if condition)
      `(pg-list-comp ,thing ,item ,collection ,condition))))
 
+(defun read-python-code (stream subchar arg)
+  (declare (ignore subchar arg))
+  (let ((code (string-trim #?" \n" (read-open-close stream #\< #\>))))
+    (read-char stream nil nil t)
+    `(pg-python ,code)))
+
 (defun enable-case-sensitive-id-syntax ()
   (set-dispatch-macro-character #\# #\i #'read-case-sensitive-id))
 
@@ -63,6 +69,10 @@
 (defun enable-pigeon-list-comp-syntax ()
   (make-dispatch-macro-character #\@)
   (set-dispatch-macro-character #\@ #\[ #'read-pigeon-list-comp))
+
+(defun enable-pigeon-python-syntax ()
+  (make-dispatch-macro-character #\@)
+  (set-dispatch-macro-character #\@ #\< #'read-python-code))
 
 (defun read-pg (input-path)
   "Read pigeon code forms"
