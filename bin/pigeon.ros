@@ -17,12 +17,14 @@ exec ros -Q -- $0 "$@"
                       :if-does-not-exist :create)
     (format fp text)))
 
+(defun pg-to-py (forms)
+  (let ((python-forms (mapcar #'pigeon:fmt forms)))
+    (cl-strings:join python-forms :separator (make-string 2 :initial-element #\linefeed))))
+
 (defun main (&rest argv)
   (ematch argv
     ((list input-path output-path)
-     (let ((forms (pigeon:read-pg input-path)))
-       (write-text (apply #'pigeon:pgfmt forms) output-path)))
+     (write-text (pg-to-py (pigeon:read-pg input-path)) output-path))
     ((list input-path)
-     (let ((forms (pigeon:read-pg input-path)))
-       (princ (apply #'pigeon:pgfmt forms))))
+     (princ (pg-to-py (pigeon:read-pg input-path))))
     (_ (princ "usage: pigeon <input-file> [<output-file>]"))))

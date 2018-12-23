@@ -4,5 +4,6 @@
         #:cl-cut
         #:trivia)
   (:export #:pgfmt
+           #:fmt
            #:read-pg
            #:load-pgl))
