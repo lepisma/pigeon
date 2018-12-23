@@ -77,6 +77,9 @@
 (defun read-pg (input-path)
   "Read pigeon code forms"
   (enable-case-sensitive-id-syntax)
+  (enable-pigeon-list-syntax)
+  (enable-pigeon-list-comp-syntax)
+  (enable-pigeon-python-syntax)
   (with-open-file (fp input-path)
     (loop for form = (read fp nil)
           while form collect form)))
