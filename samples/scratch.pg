@@ -2,7 +2,7 @@
 
 (import (numpy :as np))
 
-(load-ext "./macros.pgl")
+(pigeon::load-ext "./samples/macros.pgl")
 
 (defun hello-world (a b c)
   (print (+ "hello" a b c))

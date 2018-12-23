@@ -10,9 +10,6 @@ For a practical python-lisp, see [[https://github.com/hylang/hy][hy]].
 
 * Building
 
-/Don't use the binary version, it doesn't work for all the cases. Just run the
-repl./
-
 #+BEGIN_SRC sh
 lake build
 ./bin/pigeon <input-file> <output-path>
