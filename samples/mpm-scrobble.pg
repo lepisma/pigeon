@@ -24,7 +24,7 @@ Options:
 (import (mpm.db :as db))
 (import time :from time)
 
-(pigeon::load-ext "./samples/macros.pgl")
+(pigeon::load-ext "./macros.pgl")
 
 (with-fp "~/Desktop"
   (fp.write "lol"))
