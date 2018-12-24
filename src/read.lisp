@@ -3,16 +3,18 @@
 (in-package #:pigeon)
 (cl-interpol:enable-interpol-syntax)
 
-(defun load-pgl (input-path)
-  "Load a pgl file with macro definitions."
-  (with-open-file (fp input-path)
-    (loop for form = (read fp nil)
-          while form
-          do (match form
-               ((list* 'defmacro name _)
-                (eval form)
-                (setf *macros* (cons name *macros*)))
-               (form (eval form))))))
+(defun load-pgl (input-path-spec)
+  "Load a pgl file with macro definitions. Argument
+doesn't contain extension."
+  (let ((file-name (concatenate 'string (string-downcase (symbol-name input-path-spec)) ".pgl")))
+    (with-open-file (fp file-name)
+      (loop for form = (read fp nil)
+            while form
+            do (match form
+                 ((list* 'defmacro name _)
+                  (eval form)
+                  (setf *macros* (cons name *macros*)))
+                 (form (eval form)))))))
 
 (defun read-until (stream okay-cond)
   (map 'string #'identity

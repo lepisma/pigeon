@@ -177,7 +177,7 @@
      (fmt-block body t))
     ((cons 'import args)
      (fmt-import args))
-    ((list 'load-ext ext-path)
+    ((list 'require ext-path)
      (fmt-ext ext-path))
     ((guard x (atom x))
      (fmt-atom x))

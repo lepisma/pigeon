@@ -2,7 +2,7 @@
 
 (import (numpy :as np))
 
-(pigeon::load-ext "./macros.pgl")
+(pigeon::require macros)
 
 (defun hello-world (a b c)
   (print (+ "hello" a b c))
