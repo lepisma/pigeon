@@ -122,47 +122,6 @@ some_tuple = (1, 2)
 #+RESULTS:
 : [(x + x) for x in range(10) if evenp(x)]
 
-If you are doing a ~setf~ with a ~loop~, you should get a list comprehension
-unconditionally. Otherwise, we will run it as the regular indented loop.
-
-#+BEGIN_SRC lisp :exports both
-  ;; NOTE: These are not implemented as of now
-  ;; regular for loop
-  (pgfmt
-   '(loop for var in exp do
-     stuff
-     stuff-2))
-
-  ;; regular for loop with results collected in a list
-  (pgfmt
-   '(loop for var in exp collect stuff stuff-2))
-
-  (pgfmt
-   '(loop for var in exp
-     if condition
-     collect value))
-
-  (pgfmt
-   '(loop for var in exp
-     if condition
-     collect-dict key value))
-
-  (pgfmt
-   '(loop for var in exp
-     if condition
-     collect-set value))
-
-  (pgfmt
-   '(loop for var in exp
-     if condition
-     collect-gen value))
-
-  (pgfmt
-   '(loop while exp do
-     stuff
-     stuff-2))
-#+END_SRC
-
 ** Contexts
 
 #+BEGIN_SRC lisp :exports both
