@@ -5,9 +5,9 @@
   `(setf ,a (+ ,a ,val)))
 
 (defmacro with-fp (file-name &rest body)
-  `(pigeon::with (open ,file-name) :as fp
-                 ,@body))
+  `(pg::with (open ,file-name) :as fp
+             ,@body))
 
 (defmacro with-fpw (file-name &rest body)
-  `(pigeon::with (open ,file-name "w") :as fp
-                 ,@body))
+  `(pg::with (open ,file-name "w") :as fp
+             ,@body))

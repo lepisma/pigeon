@@ -21,7 +21,7 @@ exec ros -Q -- $0 "$@"
   (concatenate 'string (pathname-name path) "." (pathname-type path)))
 
 (defun pg-to-py (forms)
-  (let ((python-forms (mapcar #'pigeon:fmt forms)))
+  (let ((python-forms (mapcar #'pg:fmt forms)))
     (cl-strings:join python-forms :separator (make-string 2 :initial-element #\linefeed))))
 
 (defun main (&rest argv)
@@ -29,9 +29,9 @@ exec ros -Q -- $0 "$@"
     ((list input-path output-path)
      (uiop:call-with-current-directory
       (pathname input-path)
-      (lambda () (write-text (pg-to-py (pigeon:read-pg (basename input-path))) output-path))))
+      (lambda () (write-text (pg-to-py (pg:read-pg (basename input-path))) output-path))))
     ((list input-path)
      (uiop:call-with-current-directory
       (pathname input-path)
-      (lambda () (princ (pg-to-py (pigeon:read-pg (basename input-path)))))))
+      (lambda () (princ (pg-to-py (pg:read-pg (basename input-path)))))))
     (_ (princ "usage: pigeon <input-file> [<output-file>]"))))

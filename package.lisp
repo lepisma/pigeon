@@ -1,4 +1,5 @@
 (defpackage #:pigeon
+  (:nicknames #:pg)
   (:use #:cl
         #:alexandria
         #:cl-cut

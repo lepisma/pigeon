@@ -24,7 +24,7 @@ Options:
 (import (mpm.db :as db))
 (import time :from time)
 
-(pigeon::require macros)
+(require macros)
 
 (with-fp "~/Desktop"
   (fp.write "lol"))
