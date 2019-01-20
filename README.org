@@ -141,7 +141,7 @@ some_tuple = (1, 2)
 :     something_else(k)
 
 ** Macros
-Pigeon uses usual lisp macros loaded from a ~.pgl~ files using ~pg::require~. Macro
+Pigeon uses usual lisp macros loaded from a ~.pgl~ files using ~require~. Macro
 expansion works on the pigeon code before converting to python.
 
 #+BEGIN_SRC lisp :exports both
