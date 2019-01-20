@@ -2,7 +2,7 @@
   :description "s-exp based python"
   :author "Abhinav Tushar <lepisma@fastmail.com>"
   :license "GPLv3"
-  :version "0.1.6"
+  :version "0.1.7"
   :depends-on (#:trivia
                #:cl-cut
                #:cl-interpol
