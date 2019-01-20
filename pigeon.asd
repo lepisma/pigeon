@@ -6,6 +6,7 @@
   :depends-on (#:trivia
                #:cl-cut
                #:cl-interpol
+               #:named-readtables
                #:cl-strings)
   :components
   ((:file "package")

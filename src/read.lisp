@@ -62,26 +62,18 @@ doesn't contain extension."
     (read-char stream nil nil t)
     `(pg-python ,code)))
 
-(defun enable-case-sensitive-id-syntax ()
-  (set-dispatch-macro-character #\# #\i #'read-case-sensitive-id))
-
-(defun enable-pigeon-list-syntax ()
-  (set-macro-character #\[ #'read-pigeon-list))
-
-(defun enable-pigeon-list-comp-syntax ()
-  (make-dispatch-macro-character #\@)
-  (set-dispatch-macro-character #\@ #\[ #'read-pigeon-list-comp))
-
-(defun enable-pigeon-python-syntax ()
-  (make-dispatch-macro-character #\@)
-  (set-dispatch-macro-character #\@ #\< #'read-python-code))
+(named-readtables:defreadtable :pigeon-syntax
+  (:merge :standard :interpol-syntax)
+  (:macro-char #\[ #'read-pigeon-list)
+  (:macro-char #\@ :dispatch)
+  (:dispatch-macro-char #\@ #\[ #'read-pigeon-list-comp)
+  (:dispatch-macro-char #\@ #\< #'read-python-code)
+  (:macro-char #\# :dispatch)
+  (:dispatch-macro-char #\# #\i #'read-case-sensitive-id))
 
 (defun read-pg (input-path)
   "Read pigeon code forms"
-  (enable-case-sensitive-id-syntax)
-  (enable-pigeon-list-syntax)
-  (enable-pigeon-list-comp-syntax)
-  (enable-pigeon-python-syntax)
-  (with-open-file (fp input-path)
-    (loop for form = (read fp nil)
-          while form collect form)))
+  (let ((*readtable* (named-readtables:find-readtable :pigeon-syntax)))
+    (with-open-file (fp input-path)
+      (loop for form = (read fp nil)
+            while form collect form))))
